@@ -1,4 +1,14 @@
 steps:
-  - label: ":bazel: Build"
-    commands:
-      - bazel build //main:hello-world
+  - command: "install_bazel.sh"
+    key: "install_bazel"
+  - command: "bazel build //..."
+    key: "bazel_build"
+    depends_on: "install_bazel"
+#    retry:
+#      automatic:
+#        - exit_status: "*"
+#          limit: 4
+#  - command: "bazel test //src/test/py/bazel:action_temp_test"
+#    key: "bazel_test"
+#    depends_on: "install_bazel"
+# Commit 1

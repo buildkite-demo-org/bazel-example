@@ -1,11 +1,8 @@
 #!/bin/bash
 
-sudo yum install -y java-1.8.0-openjdk-devel
+wget https://github.com/bazelbuild/bazelisk/releases/download/v1.8.1/bazelisk-linux-amd64
+chmod +x bazelisk-linux-amd64
+sudo mv bazelisk-linux-amd64 /usr/local/bin/bazel
+     # make sure you get the binary available in $PATH> which bazel
+which bazel
 
-sudo rpm --import https://bazel.build/bazel-release.pub.gpg
-
-sudo yum update -y
-
-sudo yum install -y bazel
-
-bazel version
