@@ -4,7 +4,7 @@ steps:
   - command: "bazel build //..."
     key: "bazel_build"
     depends_on: "install_bazel"
-  - command: "bazel test //... --test_output=json"
+  - command: "bazel test //... --test_output=all"
     key: "bazel_test"
     depends_on: "bazel_build"
     plugins:
