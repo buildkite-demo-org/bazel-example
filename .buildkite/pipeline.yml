@@ -10,5 +10,4 @@ steps:
     retry:
       automatic:
         - exit_status: "*"
-          limit: 4
-# TestCommit 2
+          limit: 5
