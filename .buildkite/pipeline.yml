@@ -4,10 +4,15 @@ steps:
   - command: "bazel build //..."
     key: "bazel_build"
     depends_on: "install_bazel"
-  - command: "bazel test //..."
+  - command: "bazel test //... --test_output=json"
     key: "bazel_test"
     depends_on: "bazel_build"
-    retry:
-      automatic:
-        - exit_status: "*"
-          limit: 5
+    plugins:
+      - test-collector#v1.10.1:
+          files:
+            - "test-data-*.json"
+          format: "json"
+#    retry:
+#      automatic:
+#        - exit_status: "*"
+#          limit: 5
