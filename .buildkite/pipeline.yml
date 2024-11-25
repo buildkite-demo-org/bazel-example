@@ -4,11 +4,10 @@ steps:
   - command: "bazel build //..."
     key: "bazel_build"
     depends_on: "install_bazel"
-#    retry:
-#      automatic:
-#        - exit_status: "*"
-#          limit: 4
-#  - command: "bazel test //src/test/py/bazel:action_temp_test"
-#    key: "bazel_test"
-#    depends_on: "install_bazel"
-# Commit 1
+  - command: "bazel test //..."
+    key: "bazel_test"
+    depends_on: "bazel_build"
+    retry:
+      automatic:
+        - exit_status: "*"
+          limit: 4
