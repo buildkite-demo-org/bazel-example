@@ -16,8 +16,7 @@ steps:
             - "test-data-*.json"
           format: "json"
           debug: true
-#    retry:
-#      automatic:
-#        - exit_status: "*"
-#          limit: 5
-# TestCommit 2
+    retry:
+      automatic:
+        - exit_status: "*"
+          limit: 5
