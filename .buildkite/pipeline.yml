@@ -1,13 +1,12 @@
 steps:
+  - agents: { queue: "hosted" }
+    command:
+      - export BUILDKITE_ANALYTICS_TOKEN=$(buildkite-agent secret get test_suit_api_token)
+    key: "set_test_suit_api_token"
   - command: "install_bazel.sh"
     key: "install_bazel"
   - command: "bazel build //..."
     key: "bazel_build"
-    depends_on: "install_bazel"
-  - commands:
-      - "export BUILDKITE_ANALYTICS_TOKEN=$(buildkite-agent secret get test_suit_api_token)"
-      - "echo $BUILDKITE_ANALYTICS_TOKEN"
-    key: "set_test_suit_api_token"
     depends_on: "install_bazel"
   - command: "bazel test --test_output=all //..."
     key: "bazel_test"
