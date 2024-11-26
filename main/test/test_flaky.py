@@ -7,7 +7,7 @@ class TestFlaky(unittest.TestCase):
 
     def test_flaky(self):
         time.sleep(2)
-        self.assertTrue(random.random() < 0.20)
+        self.assertTrue(random.random() < 0.50)
 
     def test_flaky_high_chance(self):
         time.sleep(8)
