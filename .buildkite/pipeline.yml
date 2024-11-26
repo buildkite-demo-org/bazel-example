@@ -18,6 +18,7 @@ steps:
           files:
             - "test-data-*.json"
           format: "json"
+          debug: true
 #    retry:
 #      automatic:
 #        - exit_status: "*"
