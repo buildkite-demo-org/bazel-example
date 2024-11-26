@@ -1,16 +1,18 @@
 steps:
-  - agents: { queue: "default" }
-    command:
-      - export BUILDKITE_ANALYTICS_TOKEN=$(buildkite-agent secret get test_suit_api_token)
-    key: "set_test_suit_api_token"
+#  - agents: { queue: "default" }
+#    command:
+#      - "export BUILDKITE_ANALYTICS_TOKEN=$(buildkite-agent secret get test_suit_api_token)"
+#    key: "set_test_suit_api_token"
   - command: "install_bazel.sh"
     key: "install_bazel"
   - command: "bazel build //..."
     key: "bazel_build"
     depends_on: "install_bazel"
   - command: "bazel test --test_output=all //..."
+    env:
+      BUILDKITE_ANALYTICS_TOKEN: 5ZWJJfcrBvBxKbFLdekYzSGh
     key: "bazel_test"
-    depends_on: "set_test_suit_api_token"
+    depends_on: "bazel_build"
     plugins:
       - test-collector#v1.10.1:
           files:
