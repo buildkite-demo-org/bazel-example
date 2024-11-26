@@ -9,5 +9,10 @@ class TestFlaky(unittest.TestCase):
         time.sleep(5)
         self.assertTrue(random.random() < 0.20)
 
+    def test_flaky_high_chance(self):
+        time.sleep(2)
+        self.assertTrue(random.random() < 0.80)
+
+
 if __name__ == "__main__":
     unittest.main()
