@@ -14,7 +14,7 @@ steps:
       automatic:
         - exit_status: "*"
           limit: 5
-  - command: "python xml_to_json_converter.py"
+  - command: "python --version && python xml_to_json_converter.py && ls ."
     key: "upload_to_test_engine"
     label: ":Upload to TestEngine:"
     depends_on: "bazel_test"
