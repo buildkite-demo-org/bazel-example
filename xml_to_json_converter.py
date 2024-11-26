@@ -84,13 +84,16 @@ def generate_json_from_xml(xml: str) -> str:
 
 def write_json_test_data_file(file_name: str, json_content: str) -> None:
     with open(f"./test-data-{file_name}-{datetime.now().timestamp()}.json", "w") as file:
+        print(f"Writing ./test-data-{file_name}-{datetime.now().timestamp()}.json")
         file.write(json_content)
 
 
 if __name__ == "__main__":
+    print("### Starting XML to JSON converter ###")
     BASE_PATH: Path = Path(__file__).parent.joinpath("bazel-out").joinpath("k8-fastbuild").joinpath(
         "testlogs").resolve()
 
     for dir_name, xml_content in open_xml_files(BASE_PATH).items():
+        print(f"Found {dir_name}/test.xml")
         json_output: str = generate_json_from_xml(xml_content)
         write_json_test_data_file(dir_name, json_output)
