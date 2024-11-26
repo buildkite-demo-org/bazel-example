@@ -36,29 +36,23 @@ def generate_json_from_xml(xfile_path: Path) -> str:
             "result": "passed" if not is_failure(testsuite) else "failed",
             "failure_reason": None if not is_failure(testsuite) else get_failure_reason(root),
             "failure_expanded": [],
-            "history": {
-                "start_at": None,
-                "end_at": None,
-                "duration": testsuite.get('time'),
-                "children": []
-            }
+            "history": {}
         }
 
         # Iterate through test cases
         for testcase in testsuite.findall('testcase'):
-            current_time = datetime.now()
+            current_time: datetime = datetime.now()
             duration_seconds = int(testcase.get("duration"))
-            end_at = current_time
-            start_at = current_time - timedelta(seconds=duration_seconds)
+            end_at: datetime = current_time
+            start_at: datetime = current_time - timedelta(seconds=duration_seconds)
 
-            span: Dict[str, Any] = {
-                "section": testcase.get('name'),
-                "start_at": str(start_at),
-                "end_at": str(end_at),
-                "duration": str(duration_seconds),
-                "detail": {}
+            history: Dict[str, Any] = {
+                "start_at": int(start_at.timestamp()),
+                "end_at": int(end_at.timestamp()),
+                "duration": int(duration_seconds),
+                "children": []
             }
-            test_result['history']['children'].append(span)
+            test_result['history'] = history
 
             # Logic for extracting other details would go here
 
