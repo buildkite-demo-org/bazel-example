@@ -8,8 +8,6 @@ steps:
   - command: "bazel build //..."
     key: "bazel_build"
   - command: "bazel test --test_output=all //..."
-#    env:
-#      BUILDKITE_ANALYTICS_TOKEN: 5ZWJJfcrBvBxKbFLdekYzSGh
     key: "bazel_test"
     depends_on: "bazel_build"
     plugins:
