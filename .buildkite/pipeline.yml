@@ -9,8 +9,8 @@ steps:
     key: "bazel_build"
     depends_on: "install_bazel"
   - command: "bazel test --test_output=all //..."
-    env:
-      BUILDKITE_ANALYTICS_TOKEN: 5ZWJJfcrBvBxKbFLdekYzSGh
+#    env:
+#      BUILDKITE_ANALYTICS_TOKEN: 5ZWJJfcrBvBxKbFLdekYzSGh
     key: "bazel_test"
     depends_on: "bazel_build"
     plugins:
