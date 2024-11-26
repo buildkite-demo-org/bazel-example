@@ -6,20 +6,35 @@ from pathlib import Path
 from typing import List, Dict, Any
 
 
-def is_failure(testsuite) -> bool:
-    return testsuite.get('failures') == "0" or testsuite.get('errors') == "0"
+def open_xml_files(base_path: Path) -> Dict[str, str]:
+    xml_files_content = {}
+
+    # Iterate over all XML files with the name "test.xml" in the directory and subdirectories
+    for xml_file in base_path.rglob('test.xml'):
+        # Read the content of the XML file
+        with open(xml_file, 'r', encoding='utf-8') as file:
+            xml_content = file.read()
+
+        # Get the name of the directory containing the XML file
+        directory_name = xml_file.parent.name
+
+        # Add the content to the dictionary using the directory name as the key
+        xml_files_content[directory_name] = xml_content
+
+    return xml_files_content
+
+
+def is_successful(testsuite) -> bool:
+    return testsuite.get('failures') == "0" and testsuite.get('errors') == "0"
 
 
 def get_failure_reason(root) -> str:
     return str(root.find(".//error").attrib['message'])
 
 
-def generate_json_from_xml(xfile_path: Path) -> str:
-    with open(xfile_path, 'r', encoding='utf-8') as xml_file:
-        xml_input = xml_file.read()
-
+def generate_json_from_xml(xml: str) -> str:
     # Parse the XML
-    root = ET.fromstring(xml_input)
+    root = ET.fromstring(xml)
 
     # Initialize an empty list to hold all test results
     test_results: List[Dict[str, Any]] = []
@@ -27,14 +42,16 @@ def generate_json_from_xml(xfile_path: Path) -> str:
     # Iterate through test suites
     for testsuite in root.findall('testsuite'):
         # Initialize a dictionary to hold test result data
+        foo = is_successful(testsuite)
+
         test_result: Dict[str, Any] = {
             "id": str(uuid.uuid4()),
             "scope": "Analytics::Upload associations",
             "name": testsuite.get('name').split("/")[-1],
             "location": None,
             "file_name": testsuite.get('name'),
-            "result": "passed" if not is_failure(testsuite) else "failed",
-            "failure_reason": None if not is_failure(testsuite) else get_failure_reason(root),
+            "result": "passed" if is_successful(testsuite) else "failed",
+            "failure_reason": None if is_successful(testsuite) else get_failure_reason(root),
             "failure_expanded": [],
             "history": {}
         }
@@ -65,12 +82,15 @@ def generate_json_from_xml(xfile_path: Path) -> str:
     return json_output
 
 
-xml_file_path = Path('./test.xml')
+def write_json_test_data_file(file_name: str, json_content: str) -> None:
+    with open(f"./test-data-{file_name}-{datetime.now().timestamp()}.json", "w") as file:
+        file.write(json_content)
 
-# Call the function and print the JSON result
-json_output = generate_json_from_xml(xml_file_path)
 
-with open("./test.json", "w") as file:
-    file.write(json_output)
+if __name__ == "__main__":
+    BASE_PATH: Path = Path(__file__).parent.joinpath("bazel-out").joinpath("k8-fastbuild").joinpath(
+        "testlogs").resolve()
 
-print(json_output)
+    for dir_name, xml_content in open_xml_files(BASE_PATH).items():
+        json_output: str = generate_json_from_xml(xml_content)
+        write_json_test_data_file(dir_name, json_output)
