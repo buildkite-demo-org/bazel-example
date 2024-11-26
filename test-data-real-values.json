@@ -1,0 +1,18 @@
+[
+  {
+    "id": "30944e0f-581a-42d0-ac3c-fa874740d5d0",
+    "scope": "Analytics::Upload associations",
+    "name": "test_flaky",
+    "location": null,
+    "file_name": "main/test/test_flaky",
+    "result": "failed",
+    "failure_reason": "exited with error code 1",
+    "failure_expanded": [],
+    "history": {
+      "start_at": 1732628988,
+      "end_at": 1732628990,
+      "duration": 2,
+      "children": []
+    }
+  }
+]
