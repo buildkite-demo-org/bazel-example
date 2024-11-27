@@ -7,17 +7,15 @@ steps:
   #    key: "install_bazel"
   - command: "bazel --output_base=/tmp/bazel/ build //..."
     key: "bazel_build"
-  - command: "bazel --output_base=/tmp/bazel/ test --test_output=all //..."
+  - command: |
+      bazel --output_base=/tmp/bazel/ test --test_output=all //...
+      python --version && python ./xml_to_json_converter/xml_to_json_converter.py && ls /tmp/bazel/
     key: "bazel_test"
     depends_on: "bazel_build"
     retry:
       automatic:
         - exit_status: "*"
-          limit: 5
-  - command: "python --version && python xml_to_json_converter.py && ls /tmp/bazel/"
-    key: "upload_to_test_engine"
-    label: ":Upload to TestEngine:"
-    depends_on: "bazel_test"
+          limit: 2
     plugins:
       - test-collector#v1.10.1:
           files:
