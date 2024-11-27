@@ -1,7 +1,19 @@
 py_test(
-    name = "test_flaky",
+    name = "test_flaky_low",
     timeout = "short",
-    srcs = ["test_flaky.py"],
+    srcs = ["test_flaky_low.py"],
+)
+
+py_test(
+    name = "test_flaky_mid",
+    timeout = "short",
+    srcs = ["test_flaky_mid.py"],
+)
+
+py_test(
+    name = "test_flaky_high",
+    timeout = "short",
+    srcs = ["test_flaky_high.py"],
 )
 
 py_test(
