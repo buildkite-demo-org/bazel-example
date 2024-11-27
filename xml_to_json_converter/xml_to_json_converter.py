@@ -48,10 +48,13 @@ def generate_json_from_xml(xml: str) -> str:
         # Initialize a dictionary to hold test result data
         foo = is_successful(testsuite)
 
+        name = testsuite.get('name').split("/")[-1]
+        scope = name.split("_")[-1]
+
         test_result: Dict[str, Any] = {
             "id": str(uuid.uuid4()),
-            "scope": "Analytics::Upload associations",
-            "name": testsuite.get('name').split("/")[-1],
+            "scope": f"Analytics::Upload associations::{scope}",
+            "name": name,
             "location": None,
             "file_name": testsuite.get('name'),
             "result": "passed" if is_successful(testsuite) else "failed",
