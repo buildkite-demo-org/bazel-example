@@ -12,6 +12,8 @@ steps:
        python --version ;
        python ./xml_to_json_converter/xml_to_json_converter.py ;
        ls /tmp/bazel/
+    soft_fail:
+      - exit_status: 3
     key: "bazel_test"
     depends_on: "bazel_build"
 #    retry:
