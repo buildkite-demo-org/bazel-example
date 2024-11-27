@@ -14,10 +14,10 @@ steps:
        ls /tmp/bazel/
     key: "bazel_test"
     depends_on: "bazel_build"
-    retry:
-      automatic:
-        - exit_status: "*"
-          limit: 2
+#    retry:
+#      automatic:
+#        - exit_status: "*"
+#          limit: 2
     plugins:
       - test-collector#v1.10.1:
           files:
