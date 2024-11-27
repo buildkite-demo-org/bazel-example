@@ -5,16 +5,16 @@ steps:
   #    key: "set_test_suit_api_token"
   #  - command: "install_bazel.sh"
   #    key: "install_bazel"
-  - command: "bazel build //..."
+  - command: "bazel --output_base=/tmp/bazel/ build //..."
     key: "bazel_build"
-  - command: "bazel test --test_output=all //..."
+  - command: "bazel --output_base=/tmp/bazel/ test --test_output=all //..."
     key: "bazel_test"
     depends_on: "bazel_build"
     retry:
       automatic:
         - exit_status: "*"
           limit: 5
-  - command: "python --version && python xml_to_json_converter.py && ls ."
+  - command: "python --version && python xml_to_json_converter.py && ls /tmp/bazel/"
     key: "upload_to_test_engine"
     label: ":Upload to TestEngine:"
     depends_on: "bazel_test"

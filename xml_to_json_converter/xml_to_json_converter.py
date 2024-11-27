@@ -1,3 +1,4 @@
+import sys
 import uuid
 import xml.etree.ElementTree as ET
 import json
@@ -5,6 +6,9 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import List, Dict, Any
 
+def open_xml_file(path: str) -> str:
+    with open(Path(path), "r") as file:
+        return file.read()
 
 def open_xml_files(base_path: Path) -> Dict[str, str]:
     xml_files_content = {}
@@ -88,12 +92,24 @@ def write_json_test_data_file(file_name: str, json_content: str) -> None:
         file.write(json_content)
 
 
+
 if __name__ == "__main__":
     print("### Starting XML to JSON converter ###")
-    BASE_PATH: Path = Path(__file__).parent.joinpath("bazel-out").joinpath("k8-fastbuild").joinpath(
-        "testlogs").resolve()
+    BASE_PATH: Path = Path("/tmp/bazel/execroot/_main/bazel-out/k8-fastbuild/testlogs").resolve()
+
+    print(f"Path to bazel cache: {BASE_PATH}")
 
     for dir_name, xml_content in open_xml_files(BASE_PATH).items():
         print(f"Found {dir_name}/test.xml")
         json_output: str = generate_json_from_xml(xml_content)
         write_json_test_data_file(dir_name, json_output)
+
+# if __name__ == "__main__":
+#     path_to_test_xml: str = sys.argv[1]
+#     print(f"Got path to test.xml: {path_to_test_xml}")
+#     xml = open_xml_file(path_to_test_xml)
+#     json: str = generate_json_from_xml(xml)
+#     file_name = path_to_test_xml.split("/")[-2] + ".json"
+#     print(json)
+#     print(f"Write: {file_name}")
+#     # write_json_test_data_file(file_name, json)
